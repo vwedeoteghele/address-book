@@ -50,8 +50,6 @@ public class PhoneBook implements Serializable {
      * edit contacts
      * */
     void displayContacts() {
-        //sort names in the contacts collections
-//        Collections.sort((List) allContacts.keySet());
         Map<String, Contacts> newTreeMap = new TreeMap<>(allContacts);
         Map<String, Contacts> sortedHashMap = new HashMap<>();
         sortedHashMap.putAll(newTreeMap);
@@ -59,7 +57,36 @@ public class PhoneBook implements Serializable {
 
     }
     public List<Contacts> searchContacts(String searchPhrase) {
-        //create a list to store the value you want to return
-        //
+        List<Contacts> searchResult = new ArrayList<>();
+        Set<String> keySet = allContacts.keySet();
+        for(String key : keySet) {
+            if(key.contains(searchPhrase)) {
+                searchResult.add(allContacts.get(key));
+            }
+        }
+        return searchResult;
+    }
+    public Map<String, Contacts> deleteContact(String email) {
+        allContacts.remove(email);
+        return allContacts;
+    }
+
+    public void addContact(String email, String firstName, String lastName, String phoneNumber) {
+        Contacts contact = new Contacts(firstName, lastName, email, phoneNumber);
+        allContacts.put(contact.getEmail(), contact);
+    }
+
+    public void addToExistingContact(String email, String phoneNumber) {
+        Contacts contact = allContacts.get(email);
+        if(contact != null) {
+            contact.setPhoneNumbers(phoneNumber);
+        }
+    }
+    public  void displayPhoneNumbers(String email) {
+        Contacts contact = allContacts.get(email);
+        List<String> allPhoneNumbers = contact.getPhoneNumbers();
+        for(String number : allPhoneNumbers) {
+            System.out.println(number);
+        }
     }
 }
